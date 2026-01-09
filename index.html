@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Smart App Banner for iOS -->
+    <meta name="apple-itunes-app" content="app-id=6739488013">
+    
+    <title>Opening Enthral LMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 400px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 22px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .message {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+        
+        .fallback-btn {
+            display: none;
+            margin-top: 2rem;
+            padding: 14px 32px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .fallback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .logo {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">📚</div>
+        <h1>Opening Enthral LMS...</h1>
+        <div class="spinner"></div>
+        <p class="message">If the app doesn't open automatically</p>
+        <a href="https://apps.apple.com/app/id6739488013" id="fallback" class="fallback-btn">
+            Download from App Store
+        </a>
+    </div>
+
+    <script>
+        const APP_STORE_URL = 'https://apps.apple.com/app/id6739488013';
+        const TIMEOUT = 2500;
+
+        let appOpened = false;
+        let timer = null;
+
+        // Detect if app was opened
+        function detectAppOpened() {
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    appOpened = true;
+                    clearTimeout(timer);
+                }
+            });
+
+            window.addEventListener('pagehide', function() {
+                appOpened = true;
+                clearTimeout(timer);
+            });
+
+            window.addEventListener('blur', function() {
+                appOpened = true;
+                clearTimeout(timer);
+            });
+        }
+
+        // Show fallback if app doesn't open
+        function showFallback() {
+            if (!appOpened) {
+                document.getElementById('fallback').style.display = 'inline-block';
+                document.querySelector('.spinner').style.display = 'none';
+                document.querySelector('h1').textContent = 'App not installed?';
+                document.querySelector('.message').textContent = 'Download Enthral LMS to continue';
+            }
+        }
+
+        // Initialize
+        detectAppOpened();
+        timer = setTimeout(showFallback, TIMEOUT);
+
+        // Handle fallback button click
+        document.getElementById('fallback').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = APP_STORE_URL;
+        });
+
+        // For non-iOS devices, redirect immediately
+        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        if (!isIOS) {
+            document.querySelector('h1').textContent = 'Enthral LMS';
+            document.querySelector('.message').textContent = 'This app is available on iOS';
+            document.querySelector('.spinner').style.display = 'none';
+            document.getElementById('fallback').style.display = 'inline-block';
+            document.getElementById('fallback').textContent = 'View on App Store';
+        }
+
+        // Log for debugging
+        console.log('Platform:', isIOS ? 'iOS' : 'Other');
+        console.log('Current URL:', window.location.href);
+        console.log('Path:', window.location.pathname);
+    </script>
+</body>
+</html>
