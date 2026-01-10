@@ -4,7 +4,7 @@
     "details": [
       {
         "appID": "R2KNQUXDN9.com.enthrallms.elearing",
-        "paths": ["/zydusSSO/*"]
+        "paths": ["/enthral-lms-links/zydusSSO/*", "/enthral-lms-links/*", "*"]
       }
     ]
   }
